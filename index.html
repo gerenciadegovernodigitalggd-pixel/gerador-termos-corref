@@ -205,29 +205,29 @@
     <div class="content">
         <div class="info-box">
             🔧 <strong>Placeholders no seu documento:</strong><br>
-            Use <code>{{ Servidor }}</code>, <code>{{Matrícula}}</code>, <code>{{ Cargo }}</code> e <code>{{ Protocolo }}</code><br>
+            <code>{{ Servidor }}</code>, <code>{{Matrícula}}</code>, <code>{{ Cargo }}</code> e <code>{{ Protocolo }}</code><br>
             <strong>Importante:</strong> Respeite os espaços exatamente como estão no seu documento!
         </div>
 
         <div class="form-row">
             <div class="form-group">
                 <label>👤 Nome do Servidor(a)</label>
-                <input type="text" id="servidor" placeholder="Ex: JOÃO PEREIRA DA SILVA" value="JOÃO CARLOS ALMEIDA">
+                <input type="text" id="servidor" placeholder="Ex: JOÃO PEREIRA DA SILVA">
             </div>
             <div class="form-group">
                 <label>🆔 Matrícula</label>
-                <input type="text" id="matricula" placeholder="Nº da matrícula" value="123456-7">
+                <input type="text" id="matricula" placeholder="Nº da matrícula">
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group">
                 <label>📌 Cargo</label>
-                <input type="text" id="cargo" placeholder="Ex: Técnico Administrativo" value="ASSISTENTE ADMINISTRATIVO">
+                <input type="text" id="cargo" placeholder="Ex: Técnico Administrativo">
             </div>
             <div class="form-group">
                 <label>📑 Nº do Protocolo</label>
-                <input type="text" id="protocolo" placeholder="Ex: 2025/001234-5" value="2025/000123-9">
+                <input type="text" id="protocolo" placeholder="Ex: 2025/001234-5">
             </div>
         </div>
 
@@ -262,13 +262,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 <script>
-    const TEMPLATE_URL_M = "https://github.com/gerenciadegovernodigitalggd-pixel/gerador-termos-corref/raw/refs/heads/main/(M)TERMO%20DE%20INSTAURA%C3%87%C3%83O%20E%20DELIBERA%C3%87%C3%83O.docx;
+    // ============================================
+    // URLs CORRETAS dos templates no GitHub
+    // ============================================
+    const TEMPLATE_URL_M = "https://github.com/gerenciadegovernodigitalggd-pixel/gerador-termos-corref/raw/refs/heads/main/(M)TERMO%20DE%20INSTAURA%C3%87%C3%83O%20E%20DELIBERA%C3%87%C3%83O.docx";
     const TEMPLATE_URL_F = "https://github.com/gerenciadegovernodigitalggd-pixel/gerador-termos-corref/raw/refs/heads/main/(F)TERMO%20DE%20INSTAURA%C3%87%C3%83O%20E%20DELIBERA%C3%87%C3%83O.docx";
 
     async function substituirPlaceholdersNoDocx(templateUrl, dados) {
         const response = await fetch(templateUrl);
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: Falha ao baixar template.`);
+            throw new Error(`HTTP ${response.status}: Arquivo não encontrado. Verifique se o arquivo existe no GitHub.`);
         }
         
         const arrayBuffer = await response.arrayBuffer();
@@ -281,33 +284,31 @@
         
         let xmlContent = await docXmlFile.async("string");
         
-        // ==============================================
-        // SUBSTITUIÇÕES - RESPEITANDO OS ESPAÇOS DO DOCX
-        // ==============================================
-        
-        // 1. {{ Servidor }} (com espaços antes e depois)
+        // Substituições - respeitando os espaços como estão no DOCX
+        // {{ Servidor }} com espaços
         xmlContent = xmlContent.replace(/{{\s*Servidor\s*}}/g, dados.servidor);
         
-        // 2. {{Matrícula}} (sem espaços)
+        // {{Matrícula}} sem espaços
         xmlContent = xmlContent.replace(/{{\s*Matrícula\s*}}/g, dados.matricula);
         
-        // 3. {{ Cargo }} (com espaços) - incluindo o caso especial "{{ C argo}}" que apareceu no diagnóstico
+        // {{ Cargo }} com espaços (incluindo variação {{ C argo }} )
         xmlContent = xmlContent.replace(/{{\s*C\s*argo\s*}}/g, dados.cargo);
         xmlContent = xmlContent.replace(/{{\s*Cargo\s*}}/g, dados.cargo);
         
-        // 4. {{ Protocolo }} (com espaços)
+        // {{ Protocolo }} com espaços
         xmlContent = xmlContent.replace(/{{\s*Protocolo\s*}}/g, dados.protocolo);
         
-        // Também substituir as versões sem a chave dupla (que apareceram no diagnóstico)
+        // Versões com apenas uma chave (caso existam)
         xmlContent = xmlContent.replace(/{{\s*Servidor\s*}/g, dados.servidor);
         xmlContent = xmlContent.replace(/{{\s*Matrícula\s*}/g, dados.matricula);
         xmlContent = xmlContent.replace(/{{\s*Cargo\s*}/g, dados.cargo);
         xmlContent = xmlContent.replace(/{{\s*Protocolo\s*}/g, dados.protocolo);
         
-        // Data da assinatura
+        // Data da assinatura digital
         const dataAtual = new Date().toLocaleDateString('pt-BR');
         xmlContent = xmlContent.replace(/data da assinatura digital\./g, `Divinópolis, ${dataAtual}.`);
         
+        // Salvar alterações
         zip.file("word/document.xml", xmlContent);
         const novoBlob = await zip.generateAsync({ type: "blob" });
         return novoBlob;
@@ -344,7 +345,7 @@
     function mostrarErro(mensagem) {
         errorMsg.textContent = mensagem;
         errorMsg.classList.add('show');
-        setTimeout(() => errorMsg.classList.remove('show'), 5000);
+        setTimeout(() => errorMsg.classList.remove('show'), 6000);
     }
     
     function mostrarSucesso(mensagem) {
@@ -386,8 +387,8 @@
             mostrarSucesso(`✅ Documento gerado com sucesso! Mantém toda formatação original.`);
             
         } catch (error) {
-            console.error('Erro:', error);
-            mostrarErro(`❌ Erro: ${error.message}`);
+            console.error('Erro detalhado:', error);
+            mostrarErro(`❌ Erro: ${error.message}\n\nVerifique se o arquivo existe no GitHub e se a URL está correta.`);
         } finally {
             mostrarLoading(false);
         }
