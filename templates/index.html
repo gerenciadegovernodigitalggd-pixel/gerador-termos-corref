@@ -245,7 +245,7 @@
     <div class="content">
         <div class="info-box">
             🔧 <strong>Placeholders no seu documento:</strong><br>
-            <code>{{ Servidor }}</code>, <code>{{Matrícula}}</code>, <code>{{ Cargo }}</code> e <code>{{ Protocolo }}</code>
+            <code>{{ Servidor }}</code>, <code>{{Matr í cula}}</code>, <code>{{ Cargo }}</code> e <code>{{ Protocolo }}</code>
         </div>
 
         <!-- Status dos templates -->
@@ -266,8 +266,8 @@
                 <input type="text" id="servidor" placeholder="Ex: JOÃO PEREIRA DA SILVA">
             </div>
             <div class="form-group">
-                <label>🆔 Matrícula</label>
-                <input type="text" id="matricula" placeholder="Nº da matrícula">
+                <label>🆔 Matr í cula</label>
+                <input type="text" id="Matr í cula" placeholder="Nº da Matr í cula">
             </div>
         </div>
 
@@ -408,14 +408,14 @@
         
         // Substituições - respeitando os espaços
         xmlContent = xmlContent.replace(/{{\s*Servidor\s*}}/g, dados.servidor);
-        xmlContent = xmlContent.replace(/{{\s*Matrícula\s*}}/g, dados.matricula);
+        xmlContent = xmlContent.replace(/{{\s*Matr í cula\s*}}/g, dados.matricula);
         xmlContent = xmlContent.replace(/{{\s*C\s*argo\s*}}/g, dados.cargo);
         xmlContent = xmlContent.replace(/{{\s*Cargo\s*}}/g, dados.cargo);
         xmlContent = xmlContent.replace(/{{\s*Protocolo\s*}}/g, dados.protocolo);
         
         // Versões sem fechamento
         xmlContent = xmlContent.replace(/{{\s*Servidor\s*}/g, dados.servidor);
-        xmlContent = xmlContent.replace(/{{\s*Matrícula\s*}/g, dados.matricula);
+        xmlContent = xmlContent.replace(/{{\s*Matr í cula\s*}/g, dados.matricula);
         xmlContent = xmlContent.replace(/{{\s*Cargo\s*}/g, dados.cargo);
         xmlContent = xmlContent.replace(/{{\s*Protocolo\s*}/g, dados.protocolo);
         
@@ -433,7 +433,7 @@
     }
     
     const servidorInput = document.getElementById('servidor');
-    const matriculaInput = document.getElementById('matricula');
+    const matriculaInput = document.getElementById('Matr í cula');
     const cargoInput = document.getElementById('cargo');
     const protocoloInput = document.getElementById('protocolo');
     const gerarBtn = document.getElementById('gerarBtn');
@@ -459,12 +459,12 @@
     
     gerarBtn.addEventListener('click', async () => {
         const servidor = servidorInput.value.trim();
-        const matricula = matriculaInput.value.trim();
+        const Matr í cula = matriculaInput.value.trim();
         const cargo = cargoInput.value.trim();
         const protocolo = protocoloInput.value.trim();
         const genero = document.querySelector('input[name="genero"]:checked').value;
         
-        if (!servidor || !matricula || !cargo || !protocolo) {
+        if (!servidor || !Matr í cula || !cargo || !protocolo) {
             mostrarErro('❌ Preencha todos os campos!');
             return;
         }
@@ -487,7 +487,7 @@
         mostrarLoading(true);
         
         try {
-            const dados = { servidor, matricula, cargo, protocolo };
+            const dados = { servidor, Matr í cula, cargo, protocolo };
             const novoBlob = await substituirPlaceholdersNoDocx(templateArrayBuffer, dados);
             
             const nomeSlug = servidor.substring(0, 30).replace(/[^a-z0-9]/gi, '_');
