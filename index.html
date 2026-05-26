@@ -48,28 +48,10 @@
             border-radius: 40px;
         }
 
-        .header p {
-            margin-top: 8px;
-            opacity: 0.9;
-        }
-
-        .content {
-            padding: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.3rem;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .form-row .form-group {
-            flex: 1;
-        }
+        .content { padding: 2rem; }
+        .form-group { margin-bottom: 1.3rem; }
+        .form-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .form-row .form-group { flex: 1; }
 
         label {
             display: block;
@@ -86,7 +68,6 @@
             border: 2px solid #e2e8f0;
             border-radius: 16px;
             font-size: 0.95rem;
-            transition: all 0.2s;
         }
 
         input:focus {
@@ -125,59 +106,17 @@
             width: 100%;
             margin-top: 10px;
             transition: 0.2s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
         }
 
-        button:hover {
-            background: #0e4a72;
-            transform: translateY(-2px);
-        }
+        button:hover { background: #0e4a72; transform: translateY(-2px); }
+        button:disabled { background: #95a5a6; cursor: not-allowed; }
 
-        button:disabled {
-            background: #95a5a6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 20px;
-            color: #0b5e7e;
-            display: none;
-        }
-
-        .loading.show {
-            display: block;
-        }
-
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 12px;
-            border-radius: 12px;
-            margin-top: 15px;
-            display: none;
-        }
-
-        .error.show {
-            display: block;
-        }
-
-        .success {
-            background: #d4edda;
-            color: #155724;
-            padding: 12px;
-            border-radius: 12px;
-            margin-top: 15px;
-            display: none;
-        }
-
-        .success.show {
-            display: block;
-        }
+        .loading { text-align: center; padding: 20px; color: #0b5e7e; display: none; }
+        .loading.show { display: block; }
+        .error { background: #f8d7da; color: #721c24; padding: 12px; border-radius: 12px; margin-top: 15px; display: none; }
+        .error.show { display: block; }
+        .success { background: #d4edda; color: #155724; padding: 12px; border-radius: 12px; margin-top: 15px; display: none; }
+        .success.show { display: block; }
 
         .info-box {
             background: #e7f3ff;
@@ -189,22 +128,29 @@
             border-left: 4px solid #0b3b5f;
         }
 
+        .debug-box {
+            background: #f0f0f0;
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 0.7rem;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow: auto;
+            display: none;
+        }
+        .debug-box.show { display: block; }
+
         .status-box {
             background: #f8fafc;
             padding: 12px;
             border-radius: 12px;
             margin-bottom: 20px;
-            font-size: 0.8rem;
             display: flex;
             gap: 20px;
             flex-wrap: wrap;
             border: 1px solid #e2e8f0;
-        }
-
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .status-badge {
@@ -213,8 +159,7 @@
             border-radius: 50%;
             display: inline-block;
         }
-
-        .status-badge.loaded { background: #2c7a4d; box-shadow: 0 0 4px #2c7a4d; }
+        .status-badge.loaded { background: #2c7a4d; }
         .status-badge.error { background: #dc3545; }
         .status-badge.loading { background: #ffc107; animation: pulse 1s infinite; }
 
@@ -236,202 +181,228 @@
 <body>
 <div class="card">
     <div class="header">
-        <h1>
-            📄 Termo de Instauração e Deliberação
-            <small>CORREF</small>
-        </h1>
+        <h1>📄 Termo de Instauração e Deliberação <small>CORREF</small></h1>
         <p>Substitui placeholders mantendo a formatação original</p>
     </div>
     <div class="content">
         <div class="info-box">
-            🔧 <strong>Placeholders no seu documento:</strong><br>
-            <code>{{ Servidor }}</code>, <code>{{Matrícula}}</code>, <code>{{ Cargo }}</code> e <code>{{ Protocolo }}</code>
+            🔧 <strong>Placeholders que o programa procura:</strong><br>
+            <code>{{Servidor}}</code>, <code>{{servidor}}</code>, <code>{{Nome}}</code>, <code>{{nome}}</code> → Nome do servidor<br>
+            <code>{{matricula}}</code>, <code>{{Matricula}}</code>, <code>{{MATRICULA}}</code> → Matrícula<br>
+            <code>{{Cargo}}</code>, <code>{{cargo}}</code> → Cargo<br>
+            <code>{{Protocolo}}</code>, <code>{{protocolo}}</code> → Protocolo
         </div>
 
-        <!-- Status dos templates -->
         <div class="status-box" id="statusBox">
-            <div class="status-item">
-                <span class="status-badge loading" id="statusM"></span>
-                <span>📁 Template Masculino: <strong id="statusMText">Carregando...</strong></span>
-            </div>
-            <div class="status-item">
-                <span class="status-badge loading" id="statusF"></span>
-                <span>📁 Template Feminino: <strong id="statusFText">Carregando...</strong></span>
-            </div>
+            <div><span class="status-badge loading" id="statusM"></span> Template M: <span id="statusMText">carregando...</span></div>
+            <div><span class="status-badge loading" id="statusF"></span> Template F: <span id="statusFText">carregando...</span></div>
         </div>
 
         <div class="form-row">
             <div class="form-group">
                 <label>👤 Nome do Servidor(a)</label>
-                <input type="text" id="servidor" placeholder="Ex: JOÃO PEREIRA DA SILVA">
+                <input type="text" id="servidor" placeholder="Ex: JOÃO PEREIRA DA SILVA" value="JOÃO CARLOS ALMEIDA">
             </div>
             <div class="form-group">
                 <label>🆔 Matrícula</label>
-                <input type="text" id="matricula" placeholder="Nº da matrícula">
+                <input type="text" id="matricula" placeholder="Nº da matrícula" value="123456-7">
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group">
                 <label>📌 Cargo</label>
-                <input type="text" id="cargo" placeholder="Ex: Técnico Administrativo">
+                <input type="text" id="cargo" placeholder="Ex: Técnico Administrativo" value="ASSISTENTE ADMINISTRATIVO">
             </div>
             <div class="form-group">
                 <label>📑 Nº do Protocolo</label>
-                <input type="text" id="protocolo" placeholder="Ex: 2025/001234-5">
+                <input type="text" id="protocolo" placeholder="Ex: 2025/001234-5" value="2025/000123-9">
             </div>
         </div>
 
         <div class="form-group">
             <label>⚥ Modelo do documento</label>
             <div class="radio-group">
-                <label class="radio-option">
-                    <input type="radio" name="genero" value="M" checked> 👨‍💼 Servidor (masculino)
-                </label>
-                <label class="radio-option">
-                    <input type="radio" name="genero" value="F"> 👩‍💼 Servidora (feminino)
-                </label>
+                <label class="radio-option"><input type="radio" name="genero" value="M" checked> 👨‍💼 Servidor (M)</label>
+                <label class="radio-option"><input type="radio" name="genero" value="F"> 👩‍💼 Servidora (F)</label>
             </div>
         </div>
 
-        <button id="gerarBtn" disabled>
-            📄 Aguardando carregamento dos templates...
-        </button>
+        <button id="gerarBtn" disabled>📄 Aguardando templates...</button>
 
-        <div id="loadingMsg" class="loading">
-            ⏳ Processando arquivo DOCX...
-        </div>
+        <div id="loadingMsg" class="loading">⏳ Processando...</div>
         <div id="errorMsg" class="error"></div>
         <div id="successMsg" class="success"></div>
+        <div id="debugBox" class="debug-box"></div>
     </div>
-    <footer>
-        Comissão de Requalificação e Readaptação Funcional – Divinópolis<br>
-        Templates carregados do diretório /templates/ do GitHub
-    </footer>
+    <footer>Comissão de Requalificação e Readaptação Funcional – Divinópolis</footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 <script>
-    // ============================================
-    // URLs dos templates dentro do seu repositório
-    // Os arquivos devem estar na pasta /templates/
-    // ============================================
     const TEMPLATE_URL_M = "https://raw.githubusercontent.com/gerenciadegovernodigitalggd-pixel/gerador-termos-corref/main/templates/(M)TERMO%20DE%20INSTAURA%C3%87%C3%83O%20E%20DELIBERA%C3%87%C3%83O.docx";
     const TEMPLATE_URL_F = "https://raw.githubusercontent.com/gerenciadegovernodigitalggd-pixel/gerador-termos-corref/main/templates/(F)TERMO%20DE%20INSTAURA%C3%87%C3%83O%20E%20DELIBERA%C3%87%C3%83O.docx";
 
-    let templateMArrayBuffer = null;
-    let templateFArrayBuffer = null;
-    let templateMCarregado = false;
-    let templateFCarregado = false;
+    let templates = { M: null, F: null };
 
-    // Função para carregar template
+    function addDebug(msg) {
+        const debugBox = document.getElementById('debugBox');
+        debugBox.innerHTML += msg + '\n';
+        debugBox.classList.add('show');
+        console.log(msg);
+    }
+
     async function carregarTemplate(url, tipo) {
-        const statusBadge = document.getElementById(`status${tipo}`);
-        const statusText = document.getElementById(`status${tipo}Text`);
-        
         try {
-            statusText.innerText = 'Baixando...';
+            addDebug(`📥 Carregando template ${tipo}...`);
             const response = await fetch(url);
             
             if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
+                throw new Error(`HTTP ${response.status} - Arquivo não encontrado!`);
             }
             
             const arrayBuffer = await response.arrayBuffer();
+            templates[tipo] = arrayBuffer;
             
-            if (tipo === 'M') {
-                templateMArrayBuffer = arrayBuffer;
-                templateMCarregado = true;
-            } else {
-                templateFArrayBuffer = arrayBuffer;
-                templateFCarregado = true;
-            }
+            // Verificar placeholders no template
+            const zip = await JSZip.loadAsync(arrayBuffer);
+            const docXmlFile = zip.file("word/document.xml");
+            let xmlContent = await docXmlFile.async("string");
             
-            statusBadge.className = 'status-badge loaded';
-            statusText.innerText = '✓ Carregado';
+            // Procurar placeholders específicos
+            const hasMatricula = xmlContent.match(/{{2,3}\s*matricula\s*}{1,2}/gi);
+            const hasServidor = xmlContent.match(/{{2,3}\s*servidor\s*}{1,2}/gi);
+            const hasCargo = xmlContent.match(/{{2,3}\s*cargo\s*}{1,2}/gi);
+            const hasProtocolo = xmlContent.match(/{{2,3}\s*protocolo\s*}{1,2}/gi);
             
-            // Verificar se ambos foram carregados
-            if (templateMCarregado && templateFCarregado) {
+            addDebug(`🔍 Template ${tipo}:`);
+            addDebug(`   {{matricula}}: ${hasMatricula ? '✅ ENCONTRADO' : '❌ não encontrado'}`);
+            addDebug(`   {{servidor}}: ${hasServidor ? '✅ ENCONTRADO' : '❌ não encontrado'}`);
+            addDebug(`   {{cargo}}: ${hasCargo ? '✅ ENCONTRADO' : '❌ não encontrado'}`);
+            addDebug(`   {{protocolo}}: ${hasProtocolo ? '✅ ENCONTRADO' : '❌ não encontrado'}`);
+            
+            // Atualizar UI
+            document.getElementById(`status${tipo}`).className = 'status-badge loaded';
+            document.getElementById(`status${tipo}Text`).innerHTML = '✅ carregado';
+            
+            // Habilitar botão se ambos carregaram
+            if (templates.M && templates.F) {
                 document.getElementById('gerarBtn').disabled = false;
-                document.getElementById('gerarBtn').innerHTML = '📄 Gerar DOCX com placeholders substituídos';
-                mostrarSucesso('✅ Templates carregados com sucesso! Pronto para gerar documentos.');
+                document.getElementById('gerarBtn').innerHTML = '📄 Gerar DOCX';
+                addDebug('✅ Ambos os templates carregados! Pronto para gerar.');
             }
             
         } catch (error) {
-            statusBadge.className = 'status-badge error';
-            statusText.innerText = '❌ Erro ao carregar';
-            console.error(`Erro ao carregar template ${tipo}:`, error);
-            
-            // Se falhar, tenta a URL alternativa (sem a pasta templates)
-            if (url.includes('/templates/')) {
-                const urlAlternativa = url.replace('/templates/', '/');
-                statusText.innerText = 'Tentando local alternativo...';
-                
-                try {
-                    const responseAlt = await fetch(urlAlternativa);
-                    if (responseAlt.ok) {
-                        const arrayBufferAlt = await responseAlt.arrayBuffer();
-                        if (tipo === 'M') {
-                            templateMArrayBuffer = arrayBufferAlt;
-                            templateMCarregado = true;
-                        } else {
-                            templateFArrayBuffer = arrayBufferAlt;
-                            templateFCarregado = true;
-                        }
-                        statusBadge.className = 'status-badge loaded';
-                        statusText.innerText = '✓ Carregado (raiz)';
-                        
-                        if (templateMCarregado && templateFCarregado) {
-                            document.getElementById('gerarBtn').disabled = false;
-                            document.getElementById('gerarBtn').innerHTML = '📄 Gerar DOCX com placeholders substituídos';
-                        }
-                        return;
-                    }
-                } catch (e) {}
-            }
-            
-            statusText.innerText = '❌ Arquivo não encontrado';
+            addDebug(`❌ Erro ao carregar template ${tipo}: ${error.message}`);
+            document.getElementById(`status${tipo}`).className = 'status-badge error';
+            document.getElementById(`status${tipo}Text`).innerHTML = '❌ erro';
         }
     }
 
-    async function substituirPlaceholdersNoDocx(arrayBuffer, dados) {
+    async function substituirPlaceholders(arrayBuffer, dados) {
         const zip = await JSZip.loadAsync(arrayBuffer);
-        
         const docXmlFile = zip.file("word/document.xml");
-        if (!docXmlFile) {
-            throw new Error("Arquivo word/document.xml não encontrado no DOCX");
-        }
-        
         let xmlContent = await docXmlFile.async("string");
         
-        // Substituições - respeitando os espaços
-        xmlContent = xmlContent.replace(/{{\s*Servidor\s*}}/g, dados.servidor);
-        xmlContent = xmlContent.replace(/{{\s*Matrícula\s*}}/g, dados.matricula);
-        xmlContent = xmlContent.replace(/{{\s*C\s*argo\s*}}/g, dados.cargo);
-        xmlContent = xmlContent.replace(/{{\s*Cargo\s*}}/g, dados.cargo);
-        xmlContent = xmlContent.replace(/{{\s*Protocolo\s*}}/g, dados.protocolo);
+        let substituicoes = 0;
         
-        // Versões sem fechamento
-        xmlContent = xmlContent.replace(/{{\s*Servidor\s*}/g, dados.servidor);
-        xmlContent = xmlContent.replace(/{{\s*Matrícula\s*}/g, dados.matricula);
-        xmlContent = xmlContent.replace(/{{\s*Cargo\s*}/g, dados.cargo);
-        xmlContent = xmlContent.replace(/{{\s*Protocolo\s*}/g, dados.protocolo);
+        // ==============================================
+        // SUBSTITUIÇÕES - Foco no {{matricula}} (sem acento)
+        // ==============================================
+        
+        // 1. MATRÍCULA (sem acento) - PRIORIDADE
+        const matriculaPatterns = [
+            /{{2,3}\s*matricula\s*}{1,2}/gi,
+            /{{2,3}\s*Matricula\s*}{1,2}/g,
+            /{{2,3}\s*MATRICULA\s*}{1,2}/g
+        ];
+        
+        for (const pattern of matriculaPatterns) {
+            if (pattern.test(xmlContent)) {
+                const antes = xmlContent;
+                xmlContent = xmlContent.replace(pattern, dados.matricula);
+                if (antes !== xmlContent) {
+                    substituicoes++;
+                    addDebug(`✅ Substituído matricula → "${dados.matricula}"`);
+                }
+            }
+        }
+        
+        // 2. SERVIDOR / NOME
+        const servidorPatterns = [
+            /{{2,3}\s*servidor\s*}{1,2}/gi,
+            /{{2,3}\s*Servidor\s*}{1,2}/g,
+            /{{2,3}\s*nome\s*}{1,2}/gi,
+            /{{2,3}\s*Nome\s*}{1,2}/g
+        ];
+        
+        for (const pattern of servidorPatterns) {
+            if (pattern.test(xmlContent)) {
+                const antes = xmlContent;
+                xmlContent = xmlContent.replace(pattern, dados.servidor);
+                if (antes !== xmlContent) {
+                    substituicoes++;
+                    addDebug(`✅ Substituído servidor/nome → "${dados.servidor}"`);
+                }
+            }
+        }
+        
+        // 3. CARGO
+        const cargoPatterns = [
+            /{{2,3}\s*cargo\s*}{1,2}/gi,
+            /{{2,3}\s*Cargo\s*}{1,2}/g
+        ];
+        
+        for (const pattern of cargoPatterns) {
+            if (pattern.test(xmlContent)) {
+                const antes = xmlContent;
+                xmlContent = xmlContent.replace(pattern, dados.cargo);
+                if (antes !== xmlContent) {
+                    substituicoes++;
+                    addDebug(`✅ Substituído cargo → "${dados.cargo}"`);
+                }
+            }
+        }
+        
+        // 4. PROTOCOLO
+        const protocoloPatterns = [
+            /{{2,3}\s*protocolo\s*}{1,2}/gi,
+            /{{2,3}\s*Protocolo\s*}{1,2}/g
+        ];
+        
+        for (const pattern of protocoloPatterns) {
+            if (pattern.test(xmlContent)) {
+                const antes = xmlContent;
+                xmlContent = xmlContent.replace(pattern, dados.protocolo);
+                if (antes !== xmlContent) {
+                    substituicoes++;
+                    addDebug(`✅ Substituído protocolo → "${dados.protocolo}"`);
+                }
+            }
+        }
         
         // Data da assinatura
         const dataAtual = new Date().toLocaleDateString('pt-BR');
         xmlContent = xmlContent.replace(/data da assinatura digital\./g, `Divinópolis, ${dataAtual}.`);
         
+        addDebug(`📊 Total de substituições: ${substituicoes}`);
+        
+        if (substituicoes === 0) {
+            addDebug('⚠️ NENHUM placeholder foi encontrado para substituir!');
+            addDebug('⚠️ Verifique se o documento contém: {{matricula}}, {{servidor}}, {{cargo}}, {{protocolo}}');
+        }
+        
         zip.file("word/document.xml", xmlContent);
-        const novoBlob = await zip.generateAsync({ type: "blob" });
-        return novoBlob;
+        return await zip.generateAsync({ type: "blob" });
     }
-    
+
     function downloadBlob(blob, nomeArquivo) {
         saveAs(blob, nomeArquivo);
     }
-    
+
+    // Elementos DOM
     const servidorInput = document.getElementById('servidor');
     const matriculaInput = document.getElementById('matricula');
     const cargoInput = document.getElementById('cargo');
@@ -440,23 +411,24 @@
     const loadingMsg = document.getElementById('loadingMsg');
     const errorMsg = document.getElementById('errorMsg');
     const successMsg = document.getElementById('successMsg');
-    
+    const debugBox = document.getElementById('debugBox');
+
     function mostrarLoading(show) {
         loadingMsg.classList.toggle('show', show);
     }
-    
+
     function mostrarErro(mensagem) {
         errorMsg.textContent = mensagem;
         errorMsg.classList.add('show');
         setTimeout(() => errorMsg.classList.remove('show'), 6000);
     }
-    
+
     function mostrarSucesso(mensagem) {
         successMsg.textContent = mensagem;
         successMsg.classList.add('show');
         setTimeout(() => successMsg.classList.remove('show'), 4000);
     }
-    
+
     gerarBtn.addEventListener('click', async () => {
         const servidor = servidorInput.value.trim();
         const matricula = matriculaInput.value.trim();
@@ -469,43 +441,37 @@
             return;
         }
         
-        let templateArrayBuffer;
-        if (genero === 'M') {
-            if (!templateMCarregado) {
-                mostrarErro('❌ Template Masculino ainda não carregado. Aguarde...');
-                return;
-            }
-            templateArrayBuffer = templateMArrayBuffer;
-        } else {
-            if (!templateFCarregado) {
-                mostrarErro('❌ Template Feminino ainda não carregado. Aguarde...');
-                return;
-            }
-            templateArrayBuffer = templateFArrayBuffer;
+        if (!templates[genero]) {
+            mostrarErro('❌ Template ainda não carregado. Aguarde...');
+            return;
         }
+        
+        debugBox.innerHTML = '';
+        debugBox.classList.remove('show');
+        addDebug(`🚀 Iniciando geração - Template ${genero}`);
+        addDebug(`📝 Dados: Servidor=${servidor}, Matricula=${matricula}, Cargo=${cargo}, Protocolo=${protocolo}`);
         
         mostrarLoading(true);
         
         try {
             const dados = { servidor, matricula, cargo, protocolo };
-            const novoBlob = await substituirPlaceholdersNoDocx(templateArrayBuffer, dados);
+            const novoBlob = await substituirPlaceholders(templates[genero], dados);
             
             const nomeSlug = servidor.substring(0, 30).replace(/[^a-z0-9]/gi, '_');
-            const prefixo = genero === 'M' ? 'TERMO_READAPTACAO_M' : 'TERMO_READAPTACAO_F';
-            const nomeArquivo = `${prefixo}_${nomeSlug}_${protocolo.replace(/[\/\\:]/g, '-')}.docx`;
+            const nomeArquivo = `TERMO_${genero}_${nomeSlug}.docx`;
             
             downloadBlob(novoBlob, nomeArquivo);
-            mostrarSucesso(`✅ Documento gerado com sucesso!`);
+            mostrarSucesso(`✅ Documento gerado! Verifique o debug para detalhes das substituições.`);
             
         } catch (error) {
-            console.error('Erro:', error);
             mostrarErro(`❌ Erro: ${error.message}`);
+            addDebug(`❌ ERRO: ${error.message}`);
         } finally {
             mostrarLoading(false);
         }
     });
-    
-    // Iniciar carregamento dos templates
+
+    // Iniciar carregamento
     carregarTemplate(TEMPLATE_URL_M, 'M');
     carregarTemplate(TEMPLATE_URL_F, 'F');
 </script>
