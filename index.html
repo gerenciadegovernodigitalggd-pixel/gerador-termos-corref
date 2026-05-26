@@ -3,221 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORREF - Gerador de Termo de Instauração</title>
+    <title>CORREF - Gerador com Busca Avançada</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(145deg, #e9f0f5 0%, #d9e2ec 100%);
-            min-height: 100vh;
-            padding: 2rem 1.5rem;
-        }
-
-        .card {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 2rem;
-            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-
-        .header {
-            background: #0b3b5f;
-            color: white;
-            padding: 1.6rem 2rem;
-        }
-
-        .header h1 {
-            font-size: 1.6rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .header h1 small {
-            font-size: 0.75rem;
-            background: #1f5e8e;
-            padding: 4px 12px;
-            border-radius: 40px;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, sans-serif; background: linear-gradient(145deg, #e9f0f5 0%, #d9e2ec 100%); min-height: 100vh; padding: 2rem 1.5rem; }
+        .card { max-width: 900px; margin: 0 auto; background: white; border-radius: 2rem; box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.2); overflow: hidden; }
+        .header { background: #0b3b5f; color: white; padding: 1.6rem 2rem; }
+        .header h1 { font-size: 1.6rem; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .header h1 small { font-size: 0.75rem; background: #1f5e8e; padding: 4px 12px; border-radius: 40px; }
         .content { padding: 2rem; }
         .form-group { margin-bottom: 1.3rem; }
         .form-row { display: flex; gap: 1rem; flex-wrap: wrap; }
         .form-row .form-group { flex: 1; }
-
-        label {
-            display: block;
-            font-weight: 600;
-            color: #1e4663;
-            margin-bottom: 6px;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-        }
-
-        input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            font-size: 0.95rem;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #0b3b5f;
-            box-shadow: 0 0 0 3px rgba(11, 59, 95, 0.1);
-        }
-
-        .radio-group {
-            background: #f8fafc;
-            padding: 0.8rem 1.2rem;
-            border-radius: 20px;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .radio-option {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        button {
-            background: #0b3b5f;
-            color: white;
-            border: none;
-            padding: 14px 24px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 40px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 10px;
-            transition: 0.2s;
-        }
-
+        label { display: block; font-weight: 600; color: #1e4663; margin-bottom: 6px; font-size: 0.8rem; text-transform: uppercase; }
+        input { width: 100%; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 16px; font-size: 0.95rem; }
+        input:focus { outline: none; border-color: #0b3b5f; box-shadow: 0 0 0 3px rgba(11, 59, 95, 0.1); }
+        .radio-group { background: #f8fafc; padding: 0.8rem 1.2rem; border-radius: 20px; border: 1px solid #e2e8f0; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .radio-option { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+        button { background: #0b3b5f; color: white; border: none; padding: 14px 24px; font-size: 1rem; font-weight: 600; border-radius: 40px; cursor: pointer; width: 100%; margin-top: 10px; transition: 0.2s; }
         button:hover { background: #0e4a72; transform: translateY(-2px); }
         button:disabled { background: #95a5a6; cursor: not-allowed; }
-
         .loading { text-align: center; padding: 20px; color: #0b5e7e; display: none; }
         .loading.show { display: block; }
         .error { background: #f8d7da; color: #721c24; padding: 12px; border-radius: 12px; margin-top: 15px; display: none; }
         .error.show { display: block; }
         .success { background: #d4edda; color: #155724; padding: 12px; border-radius: 12px; margin-top: 15px; display: none; }
         .success.show { display: block; }
-
-        .info-box {
-            background: #e7f3ff;
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            font-size: 0.85rem;
-            color: #0b5e7e;
-            border-left: 4px solid #0b3b5f;
-        }
-
-        .debug-box {
-            background: #f0f0f0;
-            padding: 12px;
-            border-radius: 12px;
-            margin-top: 20px;
-            font-family: monospace;
-            font-size: 0.7rem;
-            white-space: pre-wrap;
-            max-height: 200px;
-            overflow: auto;
-            display: none;
-        }
+        .info-box { background: #e7f3ff; padding: 12px; border-radius: 12px; margin-bottom: 20px; font-size: 0.85rem; color: #0b5e7e; border-left: 4px solid #0b3b5f; }
+        .debug-box { background: #f0f0f0; padding: 12px; border-radius: 12px; margin-top: 20px; font-family: monospace; font-size: 0.7rem; white-space: pre-wrap; max-height: 250px; overflow: auto; display: none; }
         .debug-box.show { display: block; }
-
-        .status-box {
-            background: #f8fafc;
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            border: 1px solid #e2e8f0;
-        }
-
-        .status-badge {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            display: inline-block;
-        }
+        .status-box { background: #f8fafc; padding: 12px; border-radius: 12px; margin-bottom: 20px; display: flex; gap: 20px; flex-wrap: wrap; border: 1px solid #e2e8f0; }
+        .status-badge { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
         .status-badge.loaded { background: #2c7a4d; }
         .status-badge.error { background: #dc3545; }
-        .status-badge.loading { background: #ffc107; animation: pulse 1s infinite; }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        footer {
-            background: #f1f6fa;
-            padding: 1rem 2rem;
-            text-align: center;
-            font-size: 0.7rem;
-            color: #5b7a97;
-            border-top: 1px solid #e2edf5;
-        }
+        .status-badge.loading { background: #ffc107; }
+        footer { background: #f1f6fa; padding: 1rem 2rem; text-align: center; font-size: 0.7rem; color: #5b7a97; border-top: 1px solid #e2edf5; }
     </style>
 </head>
 <body>
 <div class="card">
     <div class="header">
         <h1>📄 Termo de Instauração e Deliberação <small>CORREF</small></h1>
-        <p>Substitui placeholders mantendo a formatação original</p>
+        <p>Busca inteligente - Remove formatação e encontra placeholders corrompidos</p>
     </div>
     <div class="content">
         <div class="info-box">
-            🔧 <strong>Placeholders que o programa procura:</strong><br>
-            <code>{{Servidor}}</code>, <code>{{servidor}}</code>, <code>{{Nome}}</code>, <code>{{nome}}</code> → Nome do servidor<br>
-            <code>{{matricula}}</code>, <code>{{Matricula}}</code>, <code>{{MATRICULA}}</code> → Matrícula<br>
-            <code>{{Cargo}}</code>, <code>{{cargo}}</code> → Cargo<br>
-            <code>{{Protocolo}}</code>, <code>{{protocolo}}</code> → Protocolo
+            🔧 <strong>Solução para placeholders com formatação mista:</strong><br>
+            O programa agora busca pelo texto <code>matricula</code> independente da formatação do Word.
         </div>
 
-        <div class="status-box" id="statusBox">
+        <div class="status-box">
             <div><span class="status-badge loading" id="statusM"></span> Template M: <span id="statusMText">carregando...</span></div>
             <div><span class="status-badge loading" id="statusF"></span> Template F: <span id="statusFText">carregando...</span></div>
         </div>
 
         <div class="form-row">
-            <div class="form-group">
-                <label>👤 Nome do Servidor(a)</label>
-                <input type="text" id="servidor" placeholder="Ex: JOÃO PEREIRA DA SILVA" value="JOÃO CARLOS ALMEIDA">
-            </div>
-            <div class="form-group">
-                <label>🆔 Matrícula</label>
-                <input type="text" id="matricula" placeholder="Nº da matrícula" value="123456-7">
-            </div>
+            <div class="form-group"><label>👤 Nome do Servidor(a)</label><input type="text" id="servidor" placeholder="Ex: JOÃO PEREIRA DA SILVA" value="asd"></div>
+            <div class="form-group"><label>🆔 Matrícula</label><input type="text" id="matricula" placeholder="Nº da matrícula" value="11"></div>
         </div>
-
         <div class="form-row">
-            <div class="form-group">
-                <label>📌 Cargo</label>
-                <input type="text" id="cargo" placeholder="Ex: Técnico Administrativo" value="ASSISTENTE ADMINISTRATIVO">
-            </div>
-            <div class="form-group">
-                <label>📑 Nº do Protocolo</label>
-                <input type="text" id="protocolo" placeholder="Ex: 2025/001234-5" value="2025/000123-9">
-            </div>
+            <div class="form-group"><label>📌 Cargo</label><input type="text" id="cargo" placeholder="Ex: Técnico Administrativo" value="ASSISTENTE ADMINISTRATIVO"></div>
+            <div class="form-group"><label>📑 Nº do Protocolo</label><input type="text" id="protocolo" placeholder="Ex: 2025/001234-5" value="2025/000123-9"></div>
         </div>
 
         <div class="form-group">
@@ -258,47 +104,28 @@
         try {
             addDebug(`📥 Carregando template ${tipo}...`);
             const response = await fetch(url);
-            
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status} - Arquivo não encontrado!`);
-            }
-            
-            const arrayBuffer = await response.arrayBuffer();
-            templates[tipo] = arrayBuffer;
-            
-            // Verificar placeholders no template
-            const zip = await JSZip.loadAsync(arrayBuffer);
-            const docXmlFile = zip.file("word/document.xml");
-            let xmlContent = await docXmlFile.async("string");
-            
-            // Procurar placeholders específicos
-            const hasMatricula = xmlContent.match(/{{2,3}\s*matricula\s*}{1,2}/gi);
-            const hasServidor = xmlContent.match(/{{2,3}\s*servidor\s*}{1,2}/gi);
-            const hasCargo = xmlContent.match(/{{2,3}\s*cargo\s*}{1,2}/gi);
-            const hasProtocolo = xmlContent.match(/{{2,3}\s*protocolo\s*}{1,2}/gi);
-            
-            addDebug(`🔍 Template ${tipo}:`);
-            addDebug(`   {{matricula}}: ${hasMatricula ? '✅ ENCONTRADO' : '❌ não encontrado'}`);
-            addDebug(`   {{servidor}}: ${hasServidor ? '✅ ENCONTRADO' : '❌ não encontrado'}`);
-            addDebug(`   {{cargo}}: ${hasCargo ? '✅ ENCONTRADO' : '❌ não encontrado'}`);
-            addDebug(`   {{protocolo}}: ${hasProtocolo ? '✅ ENCONTRADO' : '❌ não encontrado'}`);
-            
-            // Atualizar UI
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            templates[tipo] = await response.arrayBuffer();
             document.getElementById(`status${tipo}`).className = 'status-badge loaded';
             document.getElementById(`status${tipo}Text`).innerHTML = '✅ carregado';
-            
-            // Habilitar botão se ambos carregaram
             if (templates.M && templates.F) {
                 document.getElementById('gerarBtn').disabled = false;
                 document.getElementById('gerarBtn').innerHTML = '📄 Gerar DOCX';
-                addDebug('✅ Ambos os templates carregados! Pronto para gerar.');
+                addDebug('✅ Templates carregados!');
             }
-            
         } catch (error) {
-            addDebug(`❌ Erro ao carregar template ${tipo}: ${error.message}`);
+            addDebug(`❌ Erro: ${error.message}`);
             document.getElementById(`status${tipo}`).className = 'status-badge error';
-            document.getElementById(`status${tipo}Text`).innerHTML = '❌ erro';
         }
+    }
+
+    // Função para limpar o XML e extrair texto puro
+    function limparTextoXML(xmlContent) {
+        // Remove todas as tags XML
+        let texto = xmlContent.replace(/<[^>]+>/g, ' ');
+        // Remove espaços múltiplos
+        texto = texto.replace(/\s+/g, ' ').trim();
+        return texto;
     }
 
     async function substituirPlaceholders(arrayBuffer, dados) {
@@ -309,77 +136,99 @@
         let substituicoes = 0;
         
         // ==============================================
-        // SUBSTITUIÇÕES - Foco no {{matricula}} (sem acento)
+        // MATRÍCULA - Busca inteligente ignorando formatação
         // ==============================================
+        // Primeiro, vamos ver o texto puro do XML para debug
+        const textoPuro = limparTextoXML(xmlContent);
+        addDebug(`📝 Texto puro do documento (trecho): "${textoPuro.substring(0, 200)}..."`);
         
-        // 1. MATRÍCULA (sem acento) - PRIORIDADE
-        const matriculaPatterns = [
-            /{{2,3}\s*matricula\s*}{1,2}/gi,
-            /{{2,3}\s*Matricula\s*}{1,2}/g,
-            /{{2,3}\s*MATRICULA\s*}{1,2}/g
-        ];
-        
-        for (const pattern of matriculaPatterns) {
-            if (pattern.test(xmlContent)) {
-                const antes = xmlContent;
-                xmlContent = xmlContent.replace(pattern, dados.matricula);
-                if (antes !== xmlContent) {
+        // Verifica se "matricula" existe no texto puro
+        if (textoPuro.includes('matricula')) {
+            addDebug(`✅ "matricula" encontrado no texto puro!`);
+            
+            // Agora precisamos substituir no XML original, preservando formatação
+            // Vamos remover a formatação interna e substituir todo o nó
+            
+            // Padrão para encontrar {{matricula}} com qualquer formatação interna
+            // O Word quebra textos formatados em múltiplos nós XML
+            const regexMatricula = /{{2,3}(?:<[^>]+>)*\s*(?:<[^>]+>)*m(?:<[^>]+>)*a(?:<[^>]+>)*t(?:<[^>]+>)*r(?:<[^>]+>)*i(?:<[^>]+>)*c(?:<[^>]+>)*u(?:<[^>]+>)*l(?:<[^>]+>)*a(?:<[^>]+>)*\s*(?:<[^>]+>)*}{1,2}/gi;
+            
+            const encontrado = regexMatricula.test(xmlContent);
+            if (encontrado) {
+                xmlContent = xmlContent.replace(regexMatricula, dados.matricula);
+                substituicoes++;
+                addDebug(`✅ Substituído {{matricula}} (com formatação) → "${dados.matricula}"`);
+            } else {
+                // Fallback: substituir apenas o texto "matricula" preservando o que está ao redor
+                addDebug(`⚠️ Placeholder com formatação não encontrado, tentando substituição simples...`);
+                
+                // Substitui o texto literal "matricula" dentro do contexto de placeholder
+                const regexSimples = /({{2,3}\s*)(?:<[^>]+>)*m(?:<[^>]+>)*a(?:<[^>]+>)*t(?:<[^>]+>)*r(?:<[^>]+>)*i(?:<[^>]+>)*c(?:<[^>]+>)*u(?:<[^>]+>)*l(?:<[^>]+>)*a(?:<[^>]+>)*\s*}{1,2}/gi;
+                
+                if (regexSimples.test(xmlContent)) {
+                    xmlContent = xmlContent.replace(regexSimples, `${dados.matricula}`);
                     substituicoes++;
-                    addDebug(`✅ Substituído matricula → "${dados.matricula}"`);
+                    addDebug(`✅ Substituído via fallback → "${dados.matricula}"`);
+                } else {
+                    addDebug(`❌ Não foi possível encontrar o placeholder de matrícula`);
                 }
             }
+        } else {
+            addDebug(`❌ "matricula" NÃO encontrado no texto puro do documento.`);
+            addDebug(`📌 Verifique se o placeholder está escrito como "matricula" (sem acento)`);
         }
         
-        // 2. SERVIDOR / NOME
+        // ==============================================
+        // SERVIDOR
+        // ==============================================
         const servidorPatterns = [
-            /{{2,3}\s*servidor\s*}{1,2}/gi,
-            /{{2,3}\s*Servidor\s*}{1,2}/g,
-            /{{2,3}\s*nome\s*}{1,2}/gi,
-            /{{2,3}\s*Nome\s*}{1,2}/g
+            /{{2,3}(?:<[^>]+>)*\s*(?:<[^>]+>)*s(?:<[^>]+>)*e(?:<[^>]+>)*r(?:<[^>]+>)*v(?:<[^>]+>)*i(?:<[^>]+>)*d(?:<[^>]+>)*o(?:<[^>]+>)*r(?:<[^>]+>)*\s*}{1,2}/gi,
+            /{{2,3}\s*Servidor\s*}{1,2}/gi,
+            /{{2,3}\s*servidor\s*}{1,2}/gi
         ];
         
         for (const pattern of servidorPatterns) {
             if (pattern.test(xmlContent)) {
-                const antes = xmlContent;
                 xmlContent = xmlContent.replace(pattern, dados.servidor);
-                if (antes !== xmlContent) {
-                    substituicoes++;
-                    addDebug(`✅ Substituído servidor/nome → "${dados.servidor}"`);
-                }
+                substituicoes++;
+                addDebug(`✅ Substituído servidor → "${dados.servidor}"`);
+                break;
             }
         }
         
-        // 3. CARGO
+        // ==============================================
+        // CARGO
+        // ==============================================
         const cargoPatterns = [
-            /{{2,3}\s*cargo\s*}{1,2}/gi,
-            /{{2,3}\s*Cargo\s*}{1,2}/g
+            /{{2,3}(?:<[^>]+>)*\s*(?:<[^>]+>)*c(?:<[^>]+>)*a(?:<[^>]+>)*r(?:<[^>]+>)*g(?:<[^>]+>)*o(?:<[^>]+>)*\s*}{1,2}/gi,
+            /{{2,3}\s*Cargo\s*}{1,2}/gi,
+            /{{2,3}\s*cargo\s*}{1,2}/gi
         ];
         
         for (const pattern of cargoPatterns) {
             if (pattern.test(xmlContent)) {
-                const antes = xmlContent;
                 xmlContent = xmlContent.replace(pattern, dados.cargo);
-                if (antes !== xmlContent) {
-                    substituicoes++;
-                    addDebug(`✅ Substituído cargo → "${dados.cargo}"`);
-                }
+                substituicoes++;
+                addDebug(`✅ Substituído cargo → "${dados.cargo}"`);
+                break;
             }
         }
         
-        // 4. PROTOCOLO
+        // ==============================================
+        // PROTOCOLO
+        // ==============================================
         const protocoloPatterns = [
-            /{{2,3}\s*protocolo\s*}{1,2}/gi,
-            /{{2,3}\s*Protocolo\s*}{1,2}/g
+            /{{2,3}(?:<[^>]+>)*\s*(?:<[^>]+>)*p(?:<[^>]+>)*r(?:<[^>]+>)*o(?:<[^>]+>)*t(?:<[^>]+>)*o(?:<[^>]+>)*c(?:<[^>]+>)*o(?:<[^>]+>)*l(?:<[^>]+>)*o(?:<[^>]+>)*\s*}{1,2}/gi,
+            /{{2,3}\s*Protocolo\s*}{1,2}/gi,
+            /{{2,3}\s*protocolo\s*}{1,2}/gi
         ];
         
         for (const pattern of protocoloPatterns) {
             if (pattern.test(xmlContent)) {
-                const antes = xmlContent;
                 xmlContent = xmlContent.replace(pattern, dados.protocolo);
-                if (antes !== xmlContent) {
-                    substituicoes++;
-                    addDebug(`✅ Substituído protocolo → "${dados.protocolo}"`);
-                }
+                substituicoes++;
+                addDebug(`✅ Substituído protocolo → "${dados.protocolo}"`);
+                break;
             }
         }
         
@@ -387,12 +236,7 @@
         const dataAtual = new Date().toLocaleDateString('pt-BR');
         xmlContent = xmlContent.replace(/data da assinatura digital\./g, `Divinópolis, ${dataAtual}.`);
         
-        addDebug(`📊 Total de substituições: ${substituicoes}`);
-        
-        if (substituicoes === 0) {
-            addDebug('⚠️ NENHUM placeholder foi encontrado para substituir!');
-            addDebug('⚠️ Verifique se o documento contém: {{matricula}}, {{servidor}}, {{cargo}}, {{protocolo}}');
-        }
+        addDebug(`📊 Total de placeholders substituídos: ${substituicoes}`);
         
         zip.file("word/document.xml", xmlContent);
         return await zip.generateAsync({ type: "blob" });
@@ -402,7 +246,6 @@
         saveAs(blob, nomeArquivo);
     }
 
-    // Elementos DOM
     const servidorInput = document.getElementById('servidor');
     const matriculaInput = document.getElementById('matricula');
     const cargoInput = document.getElementById('cargo');
@@ -413,21 +256,9 @@
     const successMsg = document.getElementById('successMsg');
     const debugBox = document.getElementById('debugBox');
 
-    function mostrarLoading(show) {
-        loadingMsg.classList.toggle('show', show);
-    }
-
-    function mostrarErro(mensagem) {
-        errorMsg.textContent = mensagem;
-        errorMsg.classList.add('show');
-        setTimeout(() => errorMsg.classList.remove('show'), 6000);
-    }
-
-    function mostrarSucesso(mensagem) {
-        successMsg.textContent = mensagem;
-        successMsg.classList.add('show');
-        setTimeout(() => successMsg.classList.remove('show'), 4000);
-    }
+    function mostrarLoading(show) { loadingMsg.classList.toggle('show', show); }
+    function mostrarErro(mensagem) { errorMsg.textContent = mensagem; errorMsg.classList.add('show'); setTimeout(() => errorMsg.classList.remove('show'), 6000); }
+    function mostrarSucesso(mensagem) { successMsg.textContent = mensagem; successMsg.classList.add('show'); setTimeout(() => successMsg.classList.remove('show'), 4000); }
 
     gerarBtn.addEventListener('click', async () => {
         const servidor = servidorInput.value.trim();
@@ -442,14 +273,14 @@
         }
         
         if (!templates[genero]) {
-            mostrarErro('❌ Template ainda não carregado. Aguarde...');
+            mostrarErro('❌ Template ainda não carregado.');
             return;
         }
         
         debugBox.innerHTML = '';
         debugBox.classList.remove('show');
         addDebug(`🚀 Iniciando geração - Template ${genero}`);
-        addDebug(`📝 Dados: Servidor=${servidor}, Matricula=${matricula}, Cargo=${cargo}, Protocolo=${protocolo}`);
+        addDebug(`📝 Matrícula digitada: "${matricula}"`);
         
         mostrarLoading(true);
         
@@ -461,7 +292,7 @@
             const nomeArquivo = `TERMO_${genero}_${nomeSlug}.docx`;
             
             downloadBlob(novoBlob, nomeArquivo);
-            mostrarSucesso(`✅ Documento gerado! Verifique o debug para detalhes das substituições.`);
+            mostrarSucesso(`✅ Documento gerado!`);
             
         } catch (error) {
             mostrarErro(`❌ Erro: ${error.message}`);
@@ -471,7 +302,6 @@
         }
     });
 
-    // Iniciar carregamento
     carregarTemplate(TEMPLATE_URL_M, 'M');
     carregarTemplate(TEMPLATE_URL_F, 'F');
 </script>
